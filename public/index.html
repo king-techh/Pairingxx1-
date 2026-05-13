@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>YOBBY TECH - Pair Your Device</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #0a0a0a; color: #fff; min-height: 100vh; }
+  .container { max-width: 480px; margin: 0 auto; padding: 20px; }
+  
+  /* Header */
+  .header { text-align: center; padding: 40px 0 30px; }
+  .logo { width: 90px; height: 90px; border-radius: 22px; background: linear-gradient(135deg, #075E54, #25D366); display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; font-size: 40px; box-shadow: 0 8px 32px rgba(37,211,102,0.3); }
+  .header h1 { font-size: 26px; font-weight: 700; background: linear-gradient(135deg, #25D366, #128C7E); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  .header p { color: #8696A0; font-size: 14px; margin-top: 6px; }
+  
+  /* Card */
+  .card { background: #1a1a2e; border-radius: 16px; padding: 28px; margin-bottom: 16px; border: 1px solid rgba(37,211,102,0.1); }
+  .card-title { font-size: 18px; font-weight: 600; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
+  .card-title .icon { width: 32px; height: 32px; border-radius: 8px; background: rgba(37,211,102,0.15); display: flex; align-items: center; justify-content: center; font-size: 16px; }
+  
+  /* Tabs */
+  .tabs { display: flex; gap: 8px; margin-bottom: 24px; }
+  .tab { flex: 1; padding: 12px; border-radius: 12px; border: 2px solid #2a2a3e; background: transparent; color: #8696A0; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.3s; text-align: center; }
+  .tab.active { border-color: #25D366; color: #25D366; background: rgba(37,211,102,0.08); }
+  
+  /* Form */
+  .form-group { margin-bottom: 16px; }
+  .form-group label { display: block; font-size: 12px; font-weight: 600; color: #8696A0; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px; }
+  .input-wrapper { display: flex; gap: 8px; }
+  .prefix { padding: 14px 16px; border-radius: 12px; background: #2a2a3e; color: #25D366; font-weight: 600; font-size: 15px; border: 1px solid #3a3a4e; white-space: nowrap; }
+  .input { width: 100%; padding: 14px 16px; border-radius: 12px; background: #2a2a3e; border: 1px solid #3a3a4e; color: #fff; font-size: 15px; outline: none; transition: border-color 0.3s; }
+  .input:focus { border-color: #25D366; }
+  .input::placeholder { color: #555; }
+  
+  /* Carrier badge */
+  .carrier { display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; margin-top: 8px; }
+  .carrier.safaricom { background: rgba(76,175,80,0.15); color: #4CAF50; }
+  .carrier.airtel { background: rgba(255,0,0,0.15); color: #FF5252; }
+  .carrier.telkom { background: rgba(33,150,243,0.15); color: #2196F3; }
+  .carrier.unknown { background: rgba(158,158,158,0.15); color: #9E9E9E; }
+  
+  /* Button */
+  .btn { width: 100%; padding: 16px; border-radius: 12px; border: none; font-size: 16px; font-weight: 700; cursor: pointer; transition: all 0.3s; }
+  .btn-primary { background: linear-gradient(135deg, #25D366, #128C7E); color: #fff; box-shadow: 0 4px 20px rgba(37,211,102,0.3); }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 28px rgba(37,211,102,0.4); }
+  .btn-primary:active { transform: translateY(0); }
+  .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+  
+  /* Status */
+  .status-box { background: #2a2a3e; border-radius: 12px; padding: 20px; text-align: center; margin-top: 16px; display: none; }
+  .status-box.show { display: block; }
+  .status-icon { font-size: 48px; margin-bottom: 12px; }
+  .status-title { font-size: 18px; font-weight: 700; margin-bottom: 6px; }
+  .status-text { color: #8696A0; font-size: 14px; }
+  .session-id { background: rgba(37,211,102,0.1); border: 1px dashed #25D366; border-radius: 8px; padding: 12px; margin-top: 12px; font-family: monospace; font-size: 16px; color: #25D366; word-break: break-all; }
+  .copy-btn { margin-top: 8px; padding: 6px 16px; border-radius: 8px; background: rgba(37,211,102,0.2); color: #25D366; border: none; font-size: 13px; cursor: pointer; font-weight: 600; }
+  
+  /* Steps */
+  .steps { margin-top: 20px; }
+  .step { display: flex; gap: 12px; padding: 10px 0; }
+  .step-num { width: 28px; height: 28px; border-radius: 50%; background: rgba(37,211,102,0.15); color: #25D366; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; flex-shrink: 0; }
+  .step-text { font-size: 14px; color: #ccc; line-height: 1.5; }
+  
+  /* Footer */
+  .footer { text-align: center; padding: 30px 0; color: #555; font-size: 12px; }
+  .footer a { color: #25D366; text-decoration: none; }
+  
+  /* Spinner */
+  .spinner { display: inline-block; width: 20px; height: 20px; border: 2px solid rgba(255,255,255,0.3); border-top-color: #fff; border-radius: 50%; animation: spin 0.8s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  
+  /* Pulse */
+  @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.5; } }
+  .pulse { animation: pulse 2s ease-in-out infinite; }
+  
+  /* Connected state */
+  .connected .status-icon { color: #25D366; }
+</style>
+</head>
+<body>
+<div class="container">
+  <!-- Header -->
+  <div class="header">
+    <div class="logo">☠️</div>
+    <h1>TOXIC YOBBY KING</h1>
+    <p>Pair your WhatsApp with the bot</p>
+  </div>
+
+  <!-- Tabs -->
+  <div class="tabs">
+    <button class="tab active" onclick="switchTab('phone')">📱 Phone Number</button>
+    <button class="tab" onclick="switchTab('session')">🔑 Session ID</button>
+  </div>
+
+  <!-- Phone Pairing -->
+  <div class="card" id="phoneTab">
+    <div class="card-title">
+      <div class="icon">📱</div>
+      Pair with Phone Number
+    </div>
+    
+    <div class="form-group">
+      <label>WhatsApp Phone Number</label>
+      <div class="input-wrapper">
+        <div class="prefix">+254</div>
+        <input type="tel" class="input" id="phoneInput" placeholder="7XX XXX XXX" maxlength="9" oninput="detectCarrier()">
+      </div>
+      <div id="carrierBadge"></div>
+    </div>
+    
+    <button class="btn btn-primary" id="pairBtn" onclick="requestPairing()">
+      Request Pairing Code
+    </button>
+    
+    <div class="status-box" id="pairStatus">
+      <div class="status-icon" id="statusIcon">⏳</div>
+      <div class="status-title" id="statusTitle">Requesting...</div>
+      <div class="status-text" id="statusText">Please wait</div>
+      <div class="session-id" id="sessionIdBox" style="display:none"></div>
+      <button class="copy-btn" id="copyBtn" style="display:none" onclick="copySession()">📋 Copy Session ID</button>
+    </div>
+    
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-text">Enter your WhatsApp phone number above</div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-text">Click "Request Pairing Code" and wait</div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-text">Open WhatsApp → Settings → Linked Devices → Link with phone number</div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-text">Enter the pairing code you receive on WhatsApp</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Session ID Tab -->
+  <div class="card" id="sessionTab" style="display:none">
+    <div class="card-title">
+      <div class="icon">🔑</div>
+      Connect with Session ID
+    </div>
+    
+    <div class="form-group">
+      <label>Session ID</label>
+      <input type="text" class="input" id="sessionInput" placeholder="toxicyobby-XXXXXX" oninput="checkSessionFormat()">
+    </div>
+    
+    <button class="btn btn-primary" id="connectBtn" onclick="connectSession()" disabled>
+      Connect
+    </button>
+    
+    <div class="status-box" id="connectStatus">
+      <div class="status-icon">✅</div>
+      <div class="status-title">Connected!</div>
+      <div class="status-text">Your bot is now active and running on your WhatsApp number</div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="footer">
+    <p>☠️ TOXIC YOBBY KING v6.0</p>
+    <p style="margin-top:4px;">© 2025 TOXIC TECH INC | <a href="https://github.com/king-techh/TOXIC_YOBBY_KING" target="_blank">Fork on GitHub</a></p>
+  </div>
+</div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script>
+const socket = io();
+
+function switchTab(tab) {
+  document.querySelectorAll('.tab').forEach((t, i) => {
+    t.classList.toggle('active', (tab === 'phone' && i === 0) || (tab === 'session' && i === 1));
+  });
+  document.getElementById('phoneTab').style.display = tab === 'phone' ? 'block' : 'none';
+  document.getElementById('sessionTab').style.display = tab === 'session' ? 'block' : 'none';
+}
+
+function detectCarrier() {
+  const phone = document.getElementById('phoneInput').value.replace(/\D/g, '');
+  const badge = document.getElementById('carrierBadge');
+  if (phone.length < 3) { badge.innerHTML = ''; return; }
+  
+  const prefix = phone.substring(0, 3);
+  const safaricom = ['700','701','702','703','704','705','706','707','708','709','710','711','712','713','714','715','716','717','718','719','720','721','722','723','724','725','726','727','728','729','740','741','742','743','744','745','746','747','748','749','750','751','752','753','754','755','756','757','758','759','768','769','790','791','792','793','794','795','796','797','798','799'];
+  const airtel = ['730','731','732','733','734','735','736','737','738','739','780','781','782','783','784','785','786','787','788','789'];
+  const telkom = ['770','771','772','773','774','775','776','777','778','779'];
+  
+  let carrier = 'unknown', emoji = '⚪', label = 'Unknown', cls = 'unknown';
+  if (safaricom.includes(prefix)) { carrier = 'safaricom'; emoji = '🟢'; label = 'Safaricom'; cls = 'safaricom'; }
+  else if (airtel.includes(prefix)) { carrier = 'airtel'; emoji = '🔴'; label = 'Airtel'; cls = 'airtel'; }
+  else if (telkom.includes(prefix)) { carrier = 'telkom'; emoji = '🔵'; label = 'Telkom Kenya'; cls = 'telkom'; }
+  
+  if (carrier !== 'unknown') {
+    badge.innerHTML = `<div class="carrier ${cls}">${emoji} ${label} detected</div>`;
+  } else {
+    badge.innerHTML = '';
+  }
+}
+
+async function requestPairing() {
+  const phone = document.getElementById('phoneInput').value.replace(/\D/g, '');
+  if (phone.length < 9) { alert('Enter a valid phone number'); return; }
+  
+  const btn = document.getElementById('pairBtn');
+  const status = document.getElementById('pairStatus');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span> Requesting...';
+  status.classList.add('show');
+  document.getElementById('statusIcon').textContent = '⏳';
+  document.getElementById('statusTitle').textContent = 'Requesting pairing code...';
+  document.getElementById('statusText').textContent = 'Please wait while we connect to the bot';
+  document.getElementById('sessionIdBox').style.display = 'none';
+  document.getElementById('copyBtn').style.display = 'none';
+  
+  try {
+    const res = await fetch('/api/pair', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ phone: '254' + phone })
+    });
+    const data = await res.json();
+    
+    if (data.success) {
+      document.getElementById('statusIcon').textContent = '✅';
+      document.getElementById('statusTitle').textContent = 'Pairing Code Sent!';
+      document.getElementById('statusText').textContent = 'Check your WhatsApp for the pairing code. Enter it in WhatsApp > Settings > Linked Devices';
+      document.getElementById('sessionIdBox').textContent = data.sessionId;
+      document.getElementById('sessionIdBox').style.display = 'block';
+      document.getElementById('copyBtn').style.display = 'inline-block';
+    } else {
+      document.getElementById('statusIcon').textContent = '❌';
+      document.getElementById('statusTitle').textContent = 'Failed';
+      document.getElementById('statusText').textContent = data.error || 'Something went wrong';
+    }
+  } catch (err) {
+    document.getElementById('statusIcon').textContent = '❌';
+    document.getElementById('statusTitle').textContent = 'Error';
+    document.getElementById('statusText').textContent = 'Could not connect to server';
+  }
+  
+  btn.disabled = false;
+  btn.innerHTML = 'Request Pairing Code';
+}
+
+function checkSessionFormat() {
+  const val = document.getElementById('sessionInput').value.trim();
+  document.getElementById('connectBtn').disabled = !val.startsWith('toxicyobby-');
+}
+
+async function connectSession() {
+  const sessionId = document.getElementById('sessionInput').value.trim();
+  const btn = document.getElementById('connectBtn');
+  const status = document.getElementById('connectStatus');
+  
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span> Connecting...';
+  
+  try {
+    const res = await fetch('/api/connect', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ sessionId })
+    });
+    const data = await res.json();
+    
+    if (data.success) {
+      status.classList.add('show');
+      status.classList.add('connected');
+      document.getElementById('sessionTab').classList.add('connected');
+    } else {
+      alert(data.error || 'Connection failed');
+    }
+  } catch {
+    alert('Could not connect to server');
+  }
+  
+  btn.disabled = false;
+  btn.innerHTML = 'Connect';
+}
+
+function copySession() {
+  const text = document.getElementById('sessionIdBox').textContent;
+  navigator.clipboard.writeText(text).then(() => {
+    document.getElementById('copyBtn').textContent = '✅ Copied!';
+    setTimeout(() => { document.getElementById('copyBtn').textContent = '📋 Copy Session ID'; }, 2000);
+  });
+}
+
+// Socket events
+socket.on('session:connected', (data) => {
+  // Auto-detect if our session was connected
+});
+</script>
+</body>
+</html>
