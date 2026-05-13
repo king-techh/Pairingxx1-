@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: yobby-tech-pairing
+    runtime: docker
+    plan: free
+    dockerfilePath: ./Dockerfile
+    envVars:
+      - key: PORT
+        value: 1000
+      - key: NODE_ENV
+        value: production
